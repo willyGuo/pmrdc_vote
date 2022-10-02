@@ -1,0 +1,185 @@
+
+{% extends 'base.html' %}
+{% block title %}PM申請工作單{% endblock %}
+{% block content %}
+<form action="." method="POST" name="form1">
+<div class = 'info'><br></div>
+<div class ="row"> 
+    {% comment %} 左邊留白1 {% endcomment %}
+    <div class="col-2"></div>
+
+    {% comment %} 左半邊表單 {% endcomment %}
+    <div class="col-3">
+        
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">申請人</label>
+                    <input type="text" class="form-control" value={{unit.cName}} id="cName" name="cName" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">申請單號</label>
+                    <input type="text" class="form-control" value={{unit.cNumber}} id="cNumber" name="cNumber" placeholder="AM202205251259" readonly >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">客戶名稱</label>
+                    <input type="text" class="form-control" value={{unit.cCusetername}} id="cCusetername" name ="cCusetername" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案名稱</label>
+                    <input type="text" class="form-control" value={{unit.cProjectname}} id="cProjectname" name="cProjectname" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案代碼</label>
+                    <input type="text" class="form-control" value={{unit.cProjectcode}} id="cProjectcode" name="cProjectcode" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案開發地點</label>
+                    <input type="text" class="form-control" value={{unit.cLocation}} id="cLocation" name="cLocation"placeholder="台北、蘇州、巴淡..." readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">工作內容</label>
+                    <input type="text" class="form-control" value={{unit.cContent}} id="cContent" name="cContent" placeholder="設計、測試、2nd source驗證..." readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">過去共用專案</label>
+                    <textarea readonly class="form-control" id="cNoted" name="cNoted" rows="1">{{unit.cLastproject}}</textarea >
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-10">
+                檔案下載 : {% if unit.uploadedFile.url is not null %}
+                            <a href="{{ unit.uploadedFile.url }}">{{unit.title}}</a></li>
+                            {% else %}
+                            無上傳檔案
+                            {% endif %}
+                </div>
+            </div>
+
+    </div>
+    <div class="col-5">
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">工作需求區間</label>
+            
+                <input type="text" class="form-control col-12" value={{unit.cdatestart}}&nbsp;~&nbsp;{{unit.cdateend}} id="cFunction" name="cFunction" placeholder="" readonly>
+                {% comment %} <input type="text" class="form-control col-4" value={{unit.cdateend}} id="cFunction" name="cFunction" placeholder="" readonly> {% endcomment %}
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">工作所需Function</label>
+            <input type="text" class="form-control" value={{unit.cFunction}} id="cFunction" name="cFunction" placeholder="" readonly>
+          </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">開發類型</label>
+            <input type="text" class="form-control" value={{unit.cType}} id="cType" name="cType" placeholder="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">合作類型</label>
+            <input type="text" class="form-control" value={{unit.cCotpye}} id="cCotpye" name="cCotpye" placeholder="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">目前Stage</label>
+            <input type="text" class="form-control" value={{unit.cStage}} id="cStage" name="cStage" placeholder="" readonly>
+          </div>
+          <div class="form-group">
+
+                <label for="exampleFormControlInput1">特殊需求</label>
+                <textarea readonly class="form-control" id="cNoted" name="cNoted" rows="1">{{unit.cSpecial}}</textarea >
+
+        </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">備註</label>
+            <textarea readonly class="form-control" id="cNoted" name="cNoted" rows="3">{{unit.cNoted}}</textarea >
+          </div>
+    <div class="col-2"></div>
+
+</div>
+<div class="col-2"></div>
+<div class="col-2"></div>
+<div class="mb-3">
+
+    <!--<a href="../media/" + {{unit.uploadedFile}} >{{unit.title}}</a>
+    <a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>-->
+    
+  </div>
+  <div class="col-2"></div>
+  {% comment %} action="/replyupdate/{{unit.cNumber}}/load" {% endcomment %}
+{% if votealready == "No"%}
+<div class="col-2">
+    <button class="btn btn-primary" id = "voteyes" value = "Null" type="button" onclick="location.href='/replyshow/{{unit.cNumber}}/confirm/yes'"><a>有意願</a></button>
+    <a>&nbsp;</a>
+    <button class="btn btn-danger" id = "voteno" value = "Null" type="button" onclick="location.href='/replyshow/{{unit.cNumber}}/confirm/no'" ><a value = "No">無意願</a>
+    </button>
+</div>
+{% else %}
+<div class="col-2">
+    {% if unit.cStatus == "In Progress" %}
+        <button class="btn btn-primary" type="button" onclick="location.href='/replyshow/{{unit.cNumber}}/changewill'">修改意願</button>
+        <a>已投過票， 
+            {% if voteconfirm == True %}
+            <font color="white" style="background-color:MediumSeaGreen;">有意願</font>
+            {% elif voteconfirm == False %}
+            <font color="white" style="background-color:gray;">無意願</font>
+            {% else%}
+            我跑到這裡了
+            {% endif %}
+        
+        </a>
+
+    {% elif unit.cStatus == "Head deciding" %}
+        <a>Head 指派任務中</a>
+    {% endif %}
+</div>
+{% endif %}
+</form>
+<div class="col-2">
+    <button class="btn btn-secondary" type="button" onclick="location.href=/will/">上一頁
+    </button>
+</div>
+</div>
+
+</div>
+{% csrf_token %}
+<script type="text/javascript">
+	
+function change(){
+    var msg = "是否刪除表單";
+    if (confirm(msg) == true) {
+        document.form1.action= "/replydelete/{{unit.cNumber}}/";
+        document.form1.submit();
+        }
+} 
+function votefunction1(){
+    var p = $("<a id ="votefinal" value ="Yes"></a>");
+    votefinal = "Yes";
+}
+function votefunction2(){
+    var p = $("<a id ="votefinal" value ="No"></a>");
+    votefinal = "No";
+}
+</script>
+
+{% endblock %}
+    
