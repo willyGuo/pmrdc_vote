@@ -13,7 +13,7 @@
 
     </div>
     <div class="col-6">
-        <div class="contentbox">
+        <div >
             <table class="table table-bordered" width="100%">
             <tr>
               <th align="left">單號</th>
@@ -26,6 +26,7 @@
               <th align="left">投票選擇</th>
             </tr>
             {% for unit in worklist %}
+
                 <tr class="alt">
                 <td><a href="../replyshow/{{unit.cNumber}}/will">{{ unit.cNumber }}</a></td>
                 <td>{{ unit.cFunction }}</td>
@@ -38,8 +39,15 @@
                 {% else %}
                 <td>{{ unit.cStatus }}</td>
                 {% endif %}
-                <td>哈哈哈</td>
-                
+
+                {% for i in unit.vote_set.all %}
+                    {% if i.cVoteselect == True %}
+                        <td>有意願&nbsp;&nbsp;<img src="{% static "images/voteyes.png" %}" ></td>
+                    {% elif i.cVoteselect == False %}
+                        <td>無意願&nbsp;&nbsp;<img src="{% static "images/voteno.png" %}" ></td>
+                    {% endif %}
+                    {% empty %}<td>尚未投票</td>
+                {% endfor %}
                 </tr>
             {% empty %}
                 <div class="status warning">

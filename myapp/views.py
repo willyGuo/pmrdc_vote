@@ -276,7 +276,12 @@ def replyshow(request, id=None, mode=None, select=None):
     if mode =="changewill":
         print(id)
         unit = requisition.objects.get(cNumber=id)
-        unitvote = Vote.objects.filter(cName = name).select_related('cVotenumber')
+        unitvote = Vote.objects.get(cName= name, cVotenumber = unit)
+        print(name)
+        print(id)
+        #print("我在這")
+        #print(a)
+        #print(unitvote)
         unitvote.delete()
         votealready = "No"
         return render(request, "replyshowwill.html", locals())
@@ -328,12 +333,22 @@ def replyUpdate(request, id=None, mode=None):
 def will(request):
     name=request.user.username
     try:
-        worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')
+        print("我有到這裡xxxx")
+        #worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')
+        #votewilllist = Vote.objects.prefetch_related().all()
+        worklist =requisition.objects.prefetch_related("vote_set")
+        print(worklist)
+        # for i in worklist:
+        #     for r in i.vote_set.all():
+        #         print(r.cVoteselect)
+        print("我有到這裡xxxx")
+
 
     except:
         errormessage = " (讀取錯誤!) "
     try:
-        unitvote = Vote.objects.filter(cName = name).filter(cVotenumber = worklist.cNumber)
+        #unitvote = Vote.objects.filter(cName = name).filter(cVotenumber = worklist.cNumber)
+        unitvote = Vote.objects.all().order_by('id')
         print("ddddd")
     except:
         voteno = "這個人還沒接過案"

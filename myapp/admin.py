@@ -29,8 +29,8 @@ class NewsUnit_dbAdmin(admin.ModelAdmin):
     ordering =('id',)
 
 class cVote_dbAdmin(admin.ModelAdmin):
-    list_display = ('id',"cName", "cVotenumber", "cVotetime", "cVoteselect")
-    list_filter = ("cName","cVotenumber","cVoteselect")
+    list_display = ('id',"cName","cVotenumber", "cVotetime", "cVoteselect")
+    list_filter = ("cName","cVoteselect")
     search_fields = ("cName",)
     ordering = ("cName",)
 

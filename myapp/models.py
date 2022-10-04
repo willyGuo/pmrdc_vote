@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from myapp.formatChecker import ContentTypeRestrictedFileField
 from django.core.exceptions import ValidationError
@@ -14,6 +15,7 @@ class student(models.Model):
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return '{0}/{1}'.format(instance.cNumber, filename)
+
 
 class requisition(models.Model):
     cName = models.CharField(max_length=20, default="")
@@ -38,8 +40,18 @@ class requisition(models.Model):
     uploadedFile = models.FileField(upload_to=user_directory_path,default='',blank=True)
     dateTimeOfUpload = models.DateTimeField(auto_now = True)
     cStatus = models.CharField(max_length=20, default="In Progress")
+    #cVotename = models.ForeignKey(Vote, on_delete=models.CASCADE, default='')
     def __str__(self):
         return self.cNumber
+class Vote(models.Model):  #新聞資料表
+    cName =  models.CharField(max_length=10)  #誰投票
+    #cVotenumber =  models.CharField(max_length=30, null=False)  #誰投票
+    cVotenumber = models.ForeignKey(requisition, on_delete=models.CASCADE,default='')
+    cVoteselect = models.BooleanField(default=False)
+    cVotetime =  models.DateTimeField(auto_now = True) #投票時間
+    def __str__(self):
+        return self.cName
+
 
 class clereply_db(models.Model):
     product = models.CharField(max_length=50, default="")
@@ -60,11 +72,3 @@ class NewsUnit(models.Model):  #新聞資料表
 	def __str__(self):
 		return self.title
 
-class Vote(models.Model):  #新聞資料表
-    cName =  models.CharField(max_length=10, null=False)  #誰投票
-    #cVotenumber =  models.CharField(max_length=30, null=False)  #誰投票
-    cVoteselect = models.BooleanField(default=False)
-    cVotetime =  models.DateTimeField(auto_now = True) #投票時間
-    cVotenumber = models.ForeignKey(requisition, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.cName
