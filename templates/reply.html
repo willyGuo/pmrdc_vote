@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}PM申請工作單{% endblock %}
 {% block content %}
+{% csrf_token %}
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <form action="." method="POST" name="form1" enctype="multipart/form-data">
 <div class = 'info'><br></div>
 <div class ="row"> 
@@ -138,8 +140,7 @@
 
 </form>
 
-{% csrf_token %}
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
 <script>
 	function correct_submit() {
         document.getElementById("cCusetername_lbl").innerText="";
