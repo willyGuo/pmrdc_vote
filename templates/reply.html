@@ -77,33 +77,21 @@
     <div class="col-5">
         <div class="form-group">
             <label for="exampleFormControlSelect1">工作所需Function</label>
-            <select class="form-control" id="cFunction" name="cFunction">
-              <option>ME</option>
-              <option>Thermal</option>
-              <option>PKG</option>
-              <option>Optical</option>
-              <option>CAE模流</option>
-              <option>CAE結構</option>
-              <option>Acoustic</option>
+            <select class="form-control" id="pro" name="cFunction">
+                <option value=''>請選擇省</option>
             </select>
           </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">開發類型</label>
-            <select class="form-control" id="cType" name="cType">
-              <option>NB</option>
-              <option>Switch</option>
-              <option>IPhone</option>
-              <option>STB</option>
-              <option>電子菸</option>
+            <select class="form-control" id="city" name="cType">
+                <option value=''>請選擇市</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="exampleFormControlSelect1">合作類型</label>
-            <select class="form-control" id="cCotpye" name="cCotpye">
-              <option>ODM</option>
-              <option>OEM</option>
-              <option>JDM</option>
+            <select class="form-control" id="dis" name="cCotpye">
+                <option value=''>請選區</option>
             </select>
           </div>
 
@@ -151,7 +139,8 @@
 </form>
 
 {% csrf_token %}
-<script type="text/javascript">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
 	function correct_submit() {
         document.getElementById("cCusetername_lbl").innerText="";
         document.getElementById("cProjectname_lbl").innerText="";
@@ -215,14 +204,41 @@
 
         if (v1 !="" && v2 !="" && v3 !="" && v4 !="" && v5 !=""&& v6 !=""&& v7 !=""){
 		var msg = "表單資訊是否正確，即將送出";
-		if (confirm(msg) == true) {
-            document.form1.action="/testurl/";
-            document.form1.submit();
-        }
-		else {  
-		}
+		    if (confirm(msg) == true) {
+                document.form1.action="/testurl/";
+                document.form1.submit();
+            }
+		    else {  
+		    }
+    
+	    }
     }
-	} 
+
+    address=function (a,b) {
+        $.get('/address/'+a,function (dic) {
+            $.each(dic,function (index,item) {
+                b.append('<option value="' + item.id + '">' + item.address + '</option>')
+            })
+        })
+    };
+    $(function () {
+        pro=$('#pro');
+        city=$('#city');
+        dis=$('#dis');
+        //查询省信息
+        address(0,pro);
+        //根据省改变查询市信息
+        pro.change(function () {
+            city.empty().append('<option value="">请选择市</option>');
+            dis.empty().append('<option value="">请选择县</option>');
+            address(this.value,city)
+        });
+        //根据市的改变查询县的信息
+        city.change(function () {
+            dis.empty().append('<option value="">请选择县</option>');
+            address(this.value,dis)
+        })
+    })
 </script>
 
 {% endblock %}

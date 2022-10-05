@@ -15,7 +15,7 @@ Including another URLconf
 """
 from xml.dom.minidom import Document
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from requests import delete
 from myapp import views
 from django.conf import settings
@@ -62,6 +62,7 @@ urlpatterns = [
     path('news/', views.news),
     path('detail/<int:detailid>/', views.detail),
     path('replydelete/<str:number>/', views.replydelete),
+    re_path('address/(\d+)$', views.AddressAPI.as_view(), name='address'),
 
 
 

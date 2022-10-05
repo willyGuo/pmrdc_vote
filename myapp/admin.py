@@ -1,5 +1,5 @@
 from django.contrib import admin
-from myapp.models import student, requisition,clereply_db, NewsUnit, Vote
+from myapp.models import student, requisition,clereply_db, NewsUnit, Vote, AddressInfo
 from myapp.views import vote
 # Register your models here.
 
@@ -34,9 +34,15 @@ class cVote_dbAdmin(admin.ModelAdmin):
     search_fields = ("cName",)
     ordering = ("cName",)
 
+class AddressInfo_dbAdmin(admin.ModelAdmin):
+    list_display = ('address', 'pid')
+    search_fields = ('address',)
+    ordering = ("id",)
+
 
 admin.site.register(student,studentAdmin)
 admin.site.register(requisition,requisitionAdmin)
 admin.site.register(clereply_db,clereply_dbAdmin)
 admin.site.register(NewsUnit,NewsUnit_dbAdmin)
 admin.site.register(Vote, cVote_dbAdmin)
+admin.site.register(AddressInfo, AddressInfo_dbAdmin)

@@ -72,3 +72,9 @@ class NewsUnit(models.Model):  #新聞資料表
 	def __str__(self):
 		return self.title
 
+class AddressInfo(models.Model):
+    address = models.CharField(max_length = 30, null = True, blank = True, verbose_name = "Function")
+    pid = models.ForeignKey("self",null = True, blank = True,  verbose_name= "自關聯", on_delete=models.CASCADE)
+    def __str__(self):
+        return self.address
+    
