@@ -63,6 +63,7 @@ urlpatterns = [
     path('detail/<int:detailid>/', views.detail),
     path('replydelete/<str:number>/', views.replydelete),
     re_path('address/(\d+)$', views.AddressAPI.as_view(), name='address'),
+    
 
 
 

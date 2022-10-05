@@ -337,7 +337,7 @@ def will(request):
         print("我有到這裡xxxx")
         #worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')
         #votewilllist = Vote.objects.prefetch_related().all()
-        worklist =requisition.objects.prefetch_related("vote_set")
+        worklist =requisition.objects.filter(cStatus="In Progress").prefetch_related("vote_set").order_by('-id')
         print(worklist)
         # for i in worklist:
         #     for r in i.vote_set.all():
@@ -517,12 +517,14 @@ def replydelete(request, number):
     return redirect('/inquire/')
 
 class AddressAPI(View):
-    def get(self, request, address_id):
-        if int(address_id) == 0:
-            address_data = AddressInfo.objects.filter(pid__isnull=True).values('id', 'address')
+    """地址信息"""
+    def get(self,request,address_id):#接收一个参数的id，指modde中的pid属性对应的字段，即表中的pid_id
+        if int(address_id)==0: #为0时表示为查询省，省的pid_id为null
+            address_data=AddressInfo.objects.filter(pid__isnull=True).values('id','address')
         else:
-            address_data = AddressInfo.objects.filter(pid_id=int(address_id)).values('id','address')
-        area_list = []
+            address_data=AddressInfo.objects.filter(pid_id=int(address_id)).values('id','address')
+        area_list=[]#转成list后json序列化
         for a in address_data:
-            area_list.append({'id':a['id'], 'address':a['address']})
-            return JsonResponse(area_list, content_tpye='application/json', safe = False)
+            area_list.append({'id':a['id'],'address':a['address']})
+        #然后通过jsonResponse返回给请求方，这里是list而不是dict，所以safe需要传入False
+        return JsonResponse(area_list,content_type='application/json',safe=False)
