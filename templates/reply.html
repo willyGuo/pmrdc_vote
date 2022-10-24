@@ -80,20 +80,20 @@
         <div class="form-group">
             <label for="exampleFormControlSelect1">工作所需Function</label>
             <select class="form-control" id="pro" name="cFunction">
-                <option value=''>請選擇省</option>
+                <option value=''>請選擇Function</option>
             </select>
           </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">開發類型</label>
             <select class="form-control" id="city" name="cType">
-                <option value=''>請選擇市</option>
+                <option value=''>請選擇開發類型</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="exampleFormControlSelect1">合作類型</label>
+            <label for="exampleFormControlSelect1">產品類型</label>
             <select class="form-control" id="dis" name="cCotpye">
-                <option value=''>請選區</option>
+                <option value=''>請選擇產品類型</option>
             </select>
           </div>
 
@@ -219,7 +219,17 @@
         $.get('/address/'+a,function (dic) {
             $.each(dic,function (index,item) {
                 b.append('<option value="' + item.id + '">' + item.address + '</option>')
-            })
+            }
+            )
+        })
+    };
+
+    address1=function (a,b) {
+        $.get('/address1/'+a,function (dic) {
+            $.each(dic,function (index,item) {
+                b.append('<option value="' + item.id + '">' + item.address + '</option>')
+            }
+            )
         })
     };
     $(function () {
@@ -230,15 +240,17 @@
         address(0,pro);
         //根据省改变查询市信息
         pro.change(function () {
-            city.empty().append('<option value="">请选择市</option>');
-            dis.empty().append('<option value="">请选择县</option>');
+            city.empty().append('<option value="">請選擇合作類型</option>');
+            dis.empty().append('<option value="">哈哈哈</option>');
             address(this.value,city)
-        });
+            address1(this.value,dis)
+
+        }); 
         //根据市的改变查询县的信息
-        city.change(function () {
-            dis.empty().append('<option value="">请选择县</option>');
+        {% comment %} city.change(function () {
+            dis.empty().append('<option value="">請選擇開發類型</option>');
             address(this.value,dis)
-        })
+        }) {% endcomment %}
     })
 </script>
 

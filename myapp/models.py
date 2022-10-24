@@ -72,9 +72,20 @@ class NewsUnit(models.Model):  #新聞資料表
 	def __str__(self):
 		return self.title
 
+class Type(models.Model):
+    name = models.CharField(max_length=50)
+    def __str__(self):
+	    return self.name
+
+class Type2(models.Model):
+    name = models.CharField(max_length=50)
+    def __str__(self):
+	    return self.name
+
 class AddressInfo(models.Model):
     address = models.CharField(max_length = 30, null = True, blank = True, verbose_name = "Function")
-    pid = models.ForeignKey("self",null = True, blank = True,  verbose_name= "自關聯", on_delete=models.CASCADE)
+    publications = models.ManyToManyField(Type,default='',blank=True)
+    publications2 = models.ManyToManyField(Type2,default='',blank=True)
     def __str__(self):
         return self.address
-    
+

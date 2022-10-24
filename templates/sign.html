@@ -10,9 +10,10 @@
 </div>
 <div class ="row">
     <div class="col-3">
+
     </div>
     <div class="col-6">
-        {% if not worklist and not worklist2%}
+        {% if not worklist %}
                 <div class="status warning">
                     <p align="center"><img src="{% static "images/icon_warning.png" %}" alt="Warning" />目前無任何申請單 </p>
                 </div>
@@ -38,42 +39,29 @@
                 <td>{{ unit.cCusetername }}</td>
                 <td>{{ unit.cProjectname }}</td>
                 <td>{{ unit.cContent }}</td>
-                {% if unit.cStatus == "In Progress" %}
-                    <td><font color="white" style="background-color:MediumSeaGreen;">{{ unit.cStatus }}</font></td>
+                {% if unit.cStatus == "Assign" %}
+                <td><font color="black" style="background-color:chocolate;">{{ unit.cStatus }}</font></td>
                 {% else %}
-                    <td>{{ unit.cStatus }}</td>
+                <td>{{ unit.cStatus }}</td>
                 {% endif %}
 
-                {% for number in unitvote %}
-                    {% if number.cVotenumber|slugify == unit.cNumber|slugify and number.cVoteselect|yesno:"Agree,Disagree" == "Agree" %}
+                {% for i in unit.vote_set.all %}
+                    {% if i.cVoteselect == True %}
                         <td>有意願&nbsp;&nbsp;<img src="{% static "images/voteyes.png" %}" ></td>
-                    {% elif number.cVotenumber|slugify == unit.cNumber|slugify and number.cVoteselect|yesno:"Agree,Disagree"  == "Disagree"%}
+                    {% elif i.cVoteselect == False %}
                         <td>無意願&nbsp;&nbsp;<img src="{% static "images/voteno.png" %}" ></td>
                     {% endif %}
+                    {% empty %}<td>尚未投票</td>
                 {% endfor %}
-            {% endfor %}
-                    
-            {% for unit in worklist2 %}
-                <tr class="alt">
-                <td><a href="../replyshow/{{unit.cNumber}}/will">{{ unit.cNumber }}</a></td>
-                <td>{{ unit.cFunction }}</td>
-                <td>{{ unit.cType }}</td>
-                <td>{{ unit.cCusetername }}</td>
-                <td>{{ unit.cProjectname }}</td>
-                <td>{{ unit.cContent }}</td>
-                {% if unit.cStatus == "In Progress" %}
-                    <td><font color="white" style="background-color:MediumSeaGreen;">{{ unit.cStatus }}</font></td>
-                {% else %}
-                    <td>{{ unit.cStatus }}</td>
-                {% endif %}
-                    <td>尚未投票</td>
                 </tr>
+            {% empty %}
+                <div class="status warning">
+                    <p align="center"><img src="{% static "images/icon_warning.png" %}" alt="Warning" />目前無任何申請單 </p>
+                </div>
             {% endfor %}
-
             </table>
-            
-            </div>
-            {% endif %}
+    </div>
+    {% endif %}
     <div class="col-3">
         
     </div>
@@ -86,7 +74,7 @@
         window.alert("彈跳視窗想要顯示的文字");
 
     }
-	
+	} 
 </script>
 
 

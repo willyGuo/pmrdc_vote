@@ -245,17 +245,24 @@ def replyshow(request, id=None, mode=None, select=None):
         return render(request, "replyshow.html", locals())
     if mode == "will":
         unit = requisition.objects.get(cNumber=id)
-        unitvotefirst = Vote.objects.all().order_by('id').select_related('cVotenumber')
+        unitvotefirst = Vote.objects.all().order_by('id').select_related('cVotenumber').filter(cName = name)
         votealready = "No"
         cName = name
         cVotenumber = id
+        print(unitvotefirst)
         for i in unitvotefirst:
-            if unit.cName == i.cName and str(unit.cNumber) == str(i.cVotenumber):
+            print(i.cVotenumber)
+            print(unit.cName)
+            print(i.cName)
+            print(unit.cNumber)
+            if name == i.cName and str(unit.cNumber) == str(i.cVotenumber):
                 votealready = "Yes"
-                print("我有到這裡")
+                print("我有到這裡xxxx")
                 print(i.cVotenumber)
+                print(i.cName)
                 voteconfirm = i.cVoteselect
                 break
+        print(votealready)
         return render(request, "replyshowwill.html", locals())
     if mode == "confirm":
         cName = name
@@ -333,11 +340,54 @@ def replyUpdate(request, id=None, mode=None):
             return redirect(page)
 def will(request):
     name=request.user.username
+    checkvote = True
     try:
         print("我有到這裡xxxx")
         #worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')
         #votewilllist = Vote.objects.prefetch_related().all()
-        worklist =requisition.objects.filter(cStatus="In Progress").prefetch_related("vote_set").order_by('-id')
+        worklist =requisition.objects.filter(cStatus="In Progress").prefetch_related("vote_set").filter(vote__cName= name).order_by('-id')
+        worklist2 =requisition.objects.filter(cStatus="In Progress").prefetch_related("vote_set").exclude(vote__cName= name).order_by('-id')
+        print("開心一下222")
+        print(worklist2)
+        # for i in worklist:
+        #     for r in i.vote_set.all():
+        #         print(r.cVoteselect)
+        print("我有到這裡正確了")
+
+
+    except:
+        errormessage = " (讀取錯誤!) "
+    try:
+        #unitvote = Vote.objects.filter(cName = name).filter(cVotenumber = worklist.cNumber)
+        unitvote = Vote.objects.all().filter(cName = name).order_by('id')
+        print(unitvote)
+        print(name)
+    except:
+        voteno = "這個人還沒接過案"
+        print("xxxxxxxx")
+    return render(request, "will.html",locals())
+def willselect(request, id= None, mode=None):
+    name=request.user.username
+    if request.method == "POST":
+        cName = name
+        cVotenumber = request.POST['cNumber']
+        unit = Vote.objects.create( cName= cName, cVotenumber = cVotenumber)
+        unit.save()
+    return render(request, "replyshow.html", locals())
+def inquire(request):
+    name=request.user.username
+    try:
+        worklist = requisition.objects.filter(cName=name).exclude(cNumber ="").order_by('-id')    
+    except:
+        errormessage = " (讀取錯誤!) "
+    return render(request, "inquire.html",locals())
+def sign(request):
+    name=request.user.username
+    try:
+        print("我有到這裡xxxx")
+        #worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')
+        #votewilllist = Vote.objects.prefetch_related().all()
+        worklist =requisition.objects.filter(cStatus="Assign").prefetch_related("vote_set").order_by('-id')
         print(worklist)
         # for i in worklist:
         #     for r in i.vote_set.all():
@@ -354,25 +404,7 @@ def will(request):
     except:
         voteno = "這個人還沒接過案"
         print("xxxxxxxx")
-    return render(request, "will.html",locals())
-def willselect(request, id= None, mode=None):
-    name=request.user.username
-    if request.method == "POST":
-        cName = name
-        cVotenumber = request.POST['cNumber']
-        unit = Vote.objects.create( cName= cName, cVotenumber = cVotenumber)
-        unit.save()
-    return render(request, "replyshow.html", locals())
-def inquire(request):
-    name=request.user.username
-    try:
-        worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").order_by('-id')    
-    except:
-        errormessage = " (讀取錯誤!) "
-    return render(request, "inquire.html",locals())
-def sign(request):
-    message = "系統尚未開放"
-    return render(request, "index.html",locals())
+    return render(request, "sign.html",locals())
 def edit2(request, id=None, mode=None):
     if mode =="load":
         unit = student.objects.get(id=id)
@@ -521,10 +553,19 @@ class AddressAPI(View):
     def get(self,request,address_id):#接收一个参数的id，指modde中的pid属性对应的字段，即表中的pid_id
         if int(address_id)==0: #为0时表示为查询省，省的pid_id为null
             address_data=AddressInfo.objects.filter(pid__isnull=True).values('id','address')
+            print("我在這")
         else:
+            print("我到else")
             address_data=AddressInfo.objects.filter(pid_id=int(address_id)).values('id','address')
-        area_list=[]#转成list后json序列化
+        area_list = []#转成list后json序列化
         for a in address_data:
             area_list.append({'id':a['id'],'address':a['address']})
+        # for a in address_data2:
+        #     area_list2.append({'id':a['id'],'address':a['address']})
+        # area_listfinal.append(area_list2)
+        # for a in address_data3:
+        #     area_list3.append({'id':a['id'],'address':a['address']})
+        # area_listfinal.append(area_list3)
+
         #然后通过jsonResponse返回给请求方，这里是list而不是dict，所以safe需要传入False
         return JsonResponse(area_list,content_type='application/json',safe=False)
