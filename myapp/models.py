@@ -1,4 +1,5 @@
 from email.policy import default
+from unittest.util import _MAX_LENGTH
 from django.db import models
 from myapp.formatChecker import ContentTypeRestrictedFileField
 from django.core.exceptions import ValidationError
@@ -59,8 +60,6 @@ class clereply_db(models.Model):
     producttype = models.CharField(max_length=50, default="")
     productscoreline = models.CharField(max_length=50, default="")
 
-
-
 class NewsUnit(models.Model):  #新聞資料表
 	catego =  models.CharField(max_length=10, null=False)  #類別關聯
 	nickname = models.CharField(max_length=20, null=False)  #暱稱
@@ -89,3 +88,35 @@ class AddressInfo(models.Model):
     def __str__(self):
         return self.address
 
+
+
+class worktype(models.Model):
+    Worktype_number = models.IntegerField()
+    Worktype_name = models.CharField(max_length = 10)
+    def __str__(self):
+        return self.Worktype_name
+
+
+class Category(models.Model):
+    Catid = models.ForeignKey(worktype, on_delete=models.CASCADE,default='') #這裏不設置主鍵了
+    Bigcate = models.IntegerField() #這裏不設置主鍵了
+    Category_name = models.CharField(max_length=50)
+    class Meta:
+        db_table = 'my_category'
+        unique_together = ("Catid", "Bigcate") #這是重點
+
+class Category2(models.Model):
+    Catid = models.ForeignKey(worktype, on_delete=models.CASCADE,default='') #這裏不設置主鍵了
+    Bigcate = models.IntegerField() #這裏不設置主鍵了
+    Category_name = models.CharField(max_length=50)
+    class Meta:
+        db_table = 'my_category2'
+        unique_together = ("Catid", "Bigcate") #這是重點
+
+class Category3(models.Model):
+    Catid = models.ForeignKey(worktype, on_delete=models.CASCADE,default='') #這裏不設置主鍵了
+    Bigcate = models.IntegerField() #這裏不設置主鍵了
+    Category_name = models.CharField(max_length=50)
+    class Meta:
+        db_table = 'my_category3'
+        unique_together = ("Catid", "Bigcate") #這是重點

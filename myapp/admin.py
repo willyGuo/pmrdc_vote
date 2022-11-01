@@ -1,5 +1,5 @@
 from django.contrib import admin
-from myapp.models import student, requisition,clereply_db, NewsUnit, Vote, AddressInfo,Type,Type2
+from myapp.models import student, requisition,clereply_db, NewsUnit, Vote, AddressInfo,Type,Type2, worktype, Category, Category2, Category3
 from myapp.views import vote
 # Register your models here.
 
@@ -49,6 +49,27 @@ class Type2_dbAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     ordering = ("id",)
 
+class worktype_dbAdmin(admin.ModelAdmin):
+    list_display = ('id', 'Worktype_number', 'Worktype_name')
+    search_fields = ('Worktype_number',)
+    ordering = ("id",)
+
+class Category_dbAdmin(admin.ModelAdmin):
+    list_display = ('id', 'Catid', 'Bigcate', 'Category_name')
+    search_fields = ('Catid',)
+    ordering = ("id",)    
+
+class Category2_dbAdmin(admin.ModelAdmin):
+    list_display = ('id', 'Catid', 'Bigcate', 'Category_name')
+    search_fields = ('Catid',)
+    ordering = ("id",)    
+
+class Category3_dbAdmin(admin.ModelAdmin):
+    list_display = ('id', 'Catid', 'Bigcate', 'Category_name')
+    search_fields = ('Catid',)
+    ordering = ("id",)    
+
+
 admin.site.register(student,studentAdmin)
 admin.site.register(requisition,requisitionAdmin)
 admin.site.register(clereply_db,clereply_dbAdmin)
@@ -57,3 +78,12 @@ admin.site.register(Vote, cVote_dbAdmin)
 admin.site.register(AddressInfo, AddressInfo_dbAdmin)
 admin.site.register(Type, Type_dbAdmin)
 admin.site.register(Type2, Type2_dbAdmin)
+admin.site.register(worktype, worktype_dbAdmin)
+admin.site.register(Category, Category_dbAdmin)
+admin.site.register(Category2, Category2_dbAdmin)
+admin.site.register(Category3, Category3_dbAdmin)
+
+
+
+
+
