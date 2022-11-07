@@ -90,33 +90,35 @@ class AddressInfo(models.Model):
 
 
 
-class worktype(models.Model):
-    Worktype_number = models.IntegerField()
-    Worktype_name = models.CharField(max_length = 10)
+class Worktype(models.Model):
+    worktypenumber = models.IntegerField()
+    worktypename = models.CharField(max_length = 10)
     def __str__(self):
-        return self.Worktype_name
+        return self.worktypename
 
 
 class Category(models.Model):
-    Catid = models.ForeignKey(worktype, on_delete=models.CASCADE,default='') #這裏不設置主鍵了
-    Bigcate = models.IntegerField() #這裏不設置主鍵了
-    Category_name = models.CharField(max_length=50)
+    worktypename = models.ForeignKey('Worktype', on_delete=models.CASCADE,default='') #這裏不設置主鍵了
+    catid = models.IntegerField() #這裏不設置主鍵了
+    categoryname = models.CharField(max_length=50)
     class Meta:
         db_table = 'my_category'
-        unique_together = ("Catid", "Bigcate") #這是重點
+        unique_together = ("catid", "worktypename") #這是重點
+    def __int__(self):
+        return self.categoryname
 
 class Category2(models.Model):
-    Catid = models.ForeignKey(worktype, on_delete=models.CASCADE,default='') #這裏不設置主鍵了
-    Bigcate = models.IntegerField() #這裏不設置主鍵了
-    Category_name = models.CharField(max_length=50)
+    worktypename = models.ForeignKey('Worktype', on_delete=models.CASCADE,default='') #這裏不設置主鍵了
+    catid = models.IntegerField() #這裏不設置主鍵了
+    categoryname = models.CharField(max_length=50)
     class Meta:
         db_table = 'my_category2'
-        unique_together = ("Catid", "Bigcate") #這是重點
+        unique_together = ("catid", "worktypename") #這是重點
 
 class Category3(models.Model):
-    Catid = models.ForeignKey(worktype, on_delete=models.CASCADE,default='') #這裏不設置主鍵了
-    Bigcate = models.IntegerField() #這裏不設置主鍵了
-    Category_name = models.CharField(max_length=50)
+    worktypename = models.ForeignKey('Worktype', on_delete=models.CASCADE,default='') #這裏不設置主鍵了
+    catid = models.IntegerField() #這裏不設置主鍵了
+    categoryname = models.CharField(max_length=50)
     class Meta:
         db_table = 'my_category3'
-        unique_together = ("Catid", "Bigcate") #這是重點
+        unique_together = ("catid", "worktypename") #這是重點

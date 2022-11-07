@@ -14,7 +14,7 @@ from django.contrib.auth import authenticate
 # Create your views here.
 from django.http import HttpResponse
 from django.contrib import auth
-from myapp.models import AddressInfo, NewsUnit, student, requisition, clereply_db,Vote
+from myapp.models import AddressInfo, NewsUnit, student, requisition, clereply_db,Vote, Worktype, Category, Category2, Category3
 from myapp.forms import PostForm, Requisition
 import time
 from . import models
@@ -133,6 +133,7 @@ def reply(request):
     name=request.user.username
     now = datetime.now()
     CNumber_time = cNumber_time()
+    units = Worktype.objects.all().order_by('id')
     if request.user.is_authenticated:
         cName=request.user.username
     return render(request, "reply.html", locals())
@@ -551,17 +552,18 @@ def replydelete(request, number):
 class AddressAPI(View):
     """地址信息"""
     def get(self,request,address_id):#接收一个参数的id，指modde中的pid属性对应的字段，即表中的pid_id
-        if int(address_id)==0: #为0时表示为查询省，省的pid_id为null
-            address_data=AddressInfo.objects.filter(pid__isnull=True).values('id','address')
-            print("我在這")
-        else:
-            print("我到else")
-            address_data=AddressInfo.objects.filter(pid_id=int(address_id)).values('id','address')
+        print("我在這")
+        print("讓我進去一下下")
+        address_data=Category.objects.select_related('worktype').filter(worktypename_id = address_id).order_by('id')
+        print("我有成功到這裡")
+        print(address_data)
         area_list = []#转成list后json序列化
-        for a in address_data:
-            area_list.append({'id':a['id'],'address':a['address']})
-        # for a in address_data2:
-        #     area_list2.append({'id':a['id'],'address':a['address']})
+        #area_list.append({'id':['id'],'categoryname':['categoryname']})
+        #print(area_list)
+        #worklist2 =requisition.objects.filter(cStatus="In Progress").prefetch_related("vote_set").exclude(vote__cName= name).order_by('-id')
+        # for a in address_data:
+        #     area_list.append({'id':a['id'],'categoryname':a['categoryname']})
+        # print(area_list)
         # area_listfinal.append(area_list2)
         # for a in address_data3:
         #     area_list3.append({'id':a['id'],'address':a['address']})
